@@ -1,0 +1,28 @@
+using UnityEngine;
+using Vuforia;
+
+public class TrackingHandler : MonoBehaviour
+{
+    public GameObject rotatingObject;
+
+    void Start()
+    {
+        var observer = GetComponent<ObserverBehaviour>();
+        if (observer)
+        {
+            observer.OnTargetStatusChanged += OnTargetStatusChanged;
+        }
+    }
+
+    private void OnTargetStatusChanged(ObserverBehaviour behaviour, TargetStatus status)
+    {
+        // Cek apakah marker terdeteksi
+        bool isVisible = status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED;
+
+        if (rotatingObject != null)
+        {
+            // Aktifkan atau nonaktifkan skrip rotasi
+            rotatingObject.GetComponent<RotateObject>().enabled = isVisible;
+        }
+    }
+}
